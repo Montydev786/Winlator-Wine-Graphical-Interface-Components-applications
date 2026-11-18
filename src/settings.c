@@ -7,6 +7,10 @@
 
 Settings g_cfg;
 
+/* turn #n into a wide string literal (L#n is not valid C) */
+#define WIDE2(x) L##x
+#define WIDE(x)  WIDE2(x)
+
 static wchar_t g_ini[MAX_PATH];
 static wchar_t g_lists[LIST_COUNT][LIST_MAX][MAX_PATH];
 static int     g_listN[LIST_COUNT];
@@ -40,10 +44,10 @@ void Settings_Load(void)
 {
     const wchar_t *ini = Settings_Path();
     Settings_Defaults(&g_cfg);
-#define X(n,d) { wchar_t tmp_[24]; GetPrivateProfileStringW(L"Settings", L#n, L"", tmp_, 24, ini); g_cfg.n = tmp_[0] ? (int)wcstol(tmp_, NULL, 10) : (d); }
+#define X(n,d) { wchar_t tmp_[24]; GetPrivateProfileStringW(L"Settings", WIDE(#n), L"", tmp_, 24, ini); g_cfg.n = tmp_[0] ? (int)wcstol(tmp_, NULL, 10) : (d); }
     SETTINGS_INT_LIST(X)
 #undef X
-#define X(n,len,d) GetPrivateProfileStringW(L"Settings", L#n, d, g_cfg.n, len, ini);
+#define X(n,len,d) GetPrivateProfileStringW(L"Settings", WIDE(#n), d, g_cfg.n, len, ini);
     SETTINGS_STR_LIST(X)
 #undef X
     /* GetPrivateProfileInt returns UINT, so -1 round-trips as 0xFFFFFFFF -> (int)-1: fine. */
@@ -54,10 +58,10 @@ void Settings_Save(void)
 {
     const wchar_t *ini = Settings_Path();
     wchar_t buf[40];
-#define X(n,d) wsprintfW(buf, L"%d", g_cfg.n); WritePrivateProfileStringW(L"Settings", L#n, buf, ini);
+#define X(n,d) wsprintfW(buf, L"%d", g_cfg.n); WritePrivateProfileStringW(L"Settings", WIDE(#n), buf, ini);
     SETTINGS_INT_LIST(X)
 #undef X
-#define X(n,len,d) WritePrivateProfileStringW(L"Settings", L#n, g_cfg.n, ini);
+#define X(n,len,d) WritePrivateProfileStringW(L"Settings", WIDE(#n), g_cfg.n, ini);
     SETTINGS_STR_LIST(X)
 #undef X
     AppList_Save();
