@@ -5,18 +5,19 @@ Unicode true
   !define ARCH "x86_64"
 !endif
 !define APPNAME   "Taskbar & Desktop by Monty"
+!define APPNAME_UI "Taskbar && Desktop by Monty"   ; && = literal & in NSIS UI text
 !define APPEXE    "MontyShell.exe"
 !define VERSION   "1.0.0"
 !define GITHUB    "https://github.com/monty786-dev/Winlator-Wine-Look-changer"
 !define UNINSTKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\MontyShell"
 
-Name "${APPNAME}"
+Name "${APPNAME_UI}"
 OutFile "..\build\MontyShell-Setup-${ARCH}.exe"
 InstallDir "$PROGRAMFILES\MontyShell"
 InstallDirRegKey HKCU "Software\MontyShell" "InstallDir"
 RequestExecutionLevel admin
 SetCompressor /SOLID lzma
-BrandingText "${APPNAME} ${VERSION}  -  star it on GitHub"
+BrandingText "${APPNAME_UI} ${VERSION}  -  star it on GitHub"
 
 !include "MUI2.nsh"
 !include "nsDialogs.nsh"
@@ -28,7 +29,7 @@ BrandingText "${APPNAME} ${VERSION}  -  star it on GitHub"
 !define MUI_INSTFILESPAGE_COLORFOREGROUND 8AB4F8
 !define MUI_INSTFILESPAGE_COLORBACKGROUND 11121A
 !define MUI_ABORTWARNING
-!define MUI_WELCOMEPAGE_TITLE "Welcome to ${APPNAME}"
+!define MUI_WELCOMEPAGE_TITLE "Welcome to ${APPNAME_UI}"
 !define MUI_WELCOMEPAGE_TEXT "A custom taskbar, start panel, window title bars and desktop for Winlator's Wine.$\r$\n$\r$\n22 OS looks (Windows 98 to 11, macOS, Ubuntu, KDE, XFCE ...), each in a modern and a classic original style.$\r$\n$\r$\nIf you like it, please give it a star on GitHub."
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPEXE}"
 !define MUI_FINISHPAGE_RUN_TEXT "Start now"
